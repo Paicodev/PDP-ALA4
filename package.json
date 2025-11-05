@@ -1,0 +1,14 @@
+{
+  "name": "tp2",
+  "version": "1.0.0",
+  "description": "paquete de practico 2",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "npm run build && node dist/main.js"
+  },
+  "devDependencies": {
+    "@types/node": "^24.6.1",
+    "typescript": "^5.0.0"
+  }
+}
