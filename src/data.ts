@@ -1,4 +1,4 @@
-//Modulo Data.js, en este van las variables globales (el struct de tareas)
+//Modulo Data.js, ya no irá un array global, ya que esto nos causará problema con las mutaciones
 
 /*la palabra clave interface en TypeScript, sirve para
 definir la forma que debe tener un objeto.
@@ -13,8 +13,17 @@ export interface Tarea{
     edicion: Date;
 }
 
-//tareas es un Array que contiene elementos del tipo tarea
-//= [] inicializa el array vacío.
-let tareas: Tarea [] = [];
+function crearTarea(datos: Tarea): Tarea {
 
-export {tareas};
+    const tareaNueva: Tarea = {
+        titulo: datos.titulo,
+        descripcion: datos.descripcion,
+        estado: datos.estado,
+        dificultad: datos.dificultad,
+        vencimiento: datos.vencimiento,
+        creacion: new Date(),
+        edicion: new Date(),
+    };
+
+    return Object.freeze(tareaNueva);
+}
