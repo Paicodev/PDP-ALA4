@@ -13,7 +13,9 @@ export interface Tarea{
     edicion: Date;
 }
 
-function crearTarea(datos: Tarea): Tarea {
+export type DatosTarea = Tarea;
+
+export function crearTarea(datos: DatosTarea): Tarea {
 
     const tareaNueva: Tarea = {
         titulo: datos.titulo,
