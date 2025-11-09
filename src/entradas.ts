@@ -1,30 +1,16 @@
-// 1. Importar readline para pedir datos por consola
-//modifico la forma de importar de commonJS a ES6
-import * as readline from "readline";
+// 1. Importar prompt-sync para pedir datos por consola.
+// Se usa la sintaxis de import de ES6 compatible con módulos CommonJS.
+import promptSync from 'prompt-sync';
+// 2. Crear la función de prompt.
+// La opción { sigint: true } permite que el programa termine con Ctrl+C.
+const prompt = promptSync({ sigint: true });
 
-// 2. Crear la interfaz para leer y escribir en consola
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
-
-/* 3. Función auxiliar para pedir entradas al usuario
-  -en question se especifica el argumento del tipo string
-  -Promise<string> la funcion devuelve una promesa que resuelve un string*/
-function input(question: string): Promise<string> {
-  return new Promise((resolve) => {
-    rl.question(question, (answer: string) => {
-      resolve(answer);
-    });
-  });
+//Función auxiliar para pedir entradas al usuario
+function input(question: string): string {
+  const answer = prompt(question);
+  // prompt-sync devuelve null si el usuario presiona Ctrl+C.
+  // Devolvemos una cadena vacía para mantener la consistencia del tipo.
+  return answer === null ? "" : answer;
 }
 
-//la funcion close no retorna nada, por lo que se pone void
-function close(): void{
-    rl.close();
-}
-
-/*exportamos el input para pedir al usuario entradas 
-y el close para cerrar la ejecucion
-modifico el tipo de exportacion a ES6*/
-export { input, close};
+export { input};

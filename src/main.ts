@@ -2,14 +2,14 @@
 /*Es el encargado de gestionar la lista de tareas
 maneja el bucle principal y coordina las funciones puras e impuras*/
 
-import { input, close} from "./entradas";
+import { input} from "./entradas";
 import { agregarTareaImpura} from "./impuras";
 import { Tarea, crearTarea } from "./data";
 import { agregarTareaPura} from "./puras";
 
 let listaDeTareas: Tarea[] = [];
 
-async function main(): Promise<void> {
+function main(): void {
   while (true) {
     console.log("\n==== MENÚ PRINCIPAL ====");
     console.log("1. Ver mis tareas");
@@ -17,7 +17,7 @@ async function main(): Promise<void> {
     console.log("3. Agregar una tarea");
     console.log("0. Salir");
     console.log("==========================\n");
-    let op: string = await input("Elija una opción: ");
+    let op: string = input("Elija una opción: ");
 
     switch (op) {
         case "1": {
@@ -29,7 +29,7 @@ async function main(): Promise<void> {
             break;
         }
       case "3": {
-        const datosCrudos = await agregarTareaImpura();
+        const datosCrudos = agregarTareaImpura();
         if (datosCrudos) {
           // Llama a la funcion pura para crear la tarea de data.ts
           //se meten los datos crudos que nos devuelve agregarTareaImpura
@@ -44,7 +44,7 @@ async function main(): Promise<void> {
 
           console.log("¡Tarea agregada con éxito!");
         }
-        await input("Presiona cualquier tecla para continuar...\n");
+        input("Presiona cualquier tecla para continuar...\n");
         break;
       }
       case "0": {

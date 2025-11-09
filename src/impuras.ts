@@ -4,18 +4,18 @@
 import { Tarea, DatosTarea } from "./data";
 import { input } from "./entradas";
 
-export async function agregarTareaImpura(): Promise<DatosTarea | null>{
+export function agregarTareaImpura(): DatosTarea | null{
   console.log("\n=== Creando una nueva tarea ===");
 
   // 1. Título
-  let titulo: string = await input("1. Ingresa el título: ");
+  let titulo: string = input("1. Ingresa el título: ");
   if (!titulo || titulo.trim() === "") {
     console.log("El título no puede estar vacío. Operación cancelada.");
     return null;
   }
 
   // 2. Descripción
-  let descripcion: string = await input("2. Ingresa la descripción: ");
+  let descripcion: string = input("2. Ingresa la descripción: ");
   if (!descripcion || descripcion.trim() === "") {
     descripcion = "Sin descripción";
   }
@@ -23,7 +23,7 @@ export async function agregarTareaImpura(): Promise<DatosTarea | null>{
   // 3. Estado
   let estado: string | null = null;
   while (true) {
-    let est: string = await input(
+    let est: string = input(
       "3. Estado ([P]endiente / [E]n curso / [T]erminada / [C]ancelada): "
     );
     est = est.trim().toUpperCase();
@@ -40,7 +40,7 @@ export async function agregarTareaImpura(): Promise<DatosTarea | null>{
   // 4. Dificultad
   let dificultad: number = 0; // Default
   while (true) {
-    let difUser: string = await input("4. Dificultad ([1] / [2] / [3]): ");
+    let difUser: string = input("4. Dificultad ([1] / [2] / [3]): ");
     let dif: number = parseInt(difUser);
     if ([1, 2, 3].includes(dif)) {
       dificultad = dif;
@@ -50,7 +50,7 @@ export async function agregarTareaImpura(): Promise<DatosTarea | null>{
   }
 
   // 5. Vencimiento
-  let vencimientoUser: string = await input(
+  let vencimientoUser: string = input(
     "5. Vencimiento (YYYY-MM-DD) o deja en blanco: "
   );
   let vencimiento: Date | null = null;
