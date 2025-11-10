@@ -13,10 +13,12 @@ export interface Tarea{
     edicion: Date;
 }
 
-export type DatosTarea = Tarea;
+//DatosTareas es una tarea sin las fechas
+export type DatosTarea = Omit<Tarea, "creacion" | "edicion">;
 
 export function crearTarea(datos: DatosTarea): Tarea {
 
+    const ahora = new Date();
     const tareaNueva: Tarea = {
         titulo: datos.titulo,
         descripcion: datos.descripcion,

@@ -48,6 +48,7 @@ function main(): void {
         break;
       }
       case "0": {
+        console.log("Adios!");
             break;
         }
     }

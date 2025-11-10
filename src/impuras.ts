@@ -70,7 +70,5 @@ export function agregarTareaImpura(): DatosTarea | null{
     estado: estado!,
     dificultad: dificultad,
     vencimiento: vencimiento,
-    creacion: new Date(),
-    edicion: new Date(),
   };
 }
