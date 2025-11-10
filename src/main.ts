@@ -7,7 +7,8 @@ import {
   agregarTareaImpura, 
   gestionarVisualizacionImpura,
   buscarYMostrarTareaImpura,
-  eliminarTareaImpura
+  eliminarTareaImpura,
+  editarTareaImpura
 } from "./impuras";
 import { Tarea, crearTarea } from "./data";
 import { 
@@ -15,7 +16,8 @@ import {
    generarMenuPuro,
    buscarTareaPorTituloPura,
    generarMensajeBusquedaPura,
-   eliminarTareaPura
+   eliminarTareaPura,
+   editarTareaPura
   } from "./puras";
 
 let listaDeTareas: Tarea[] = [];
@@ -55,6 +57,25 @@ function main(): void {
         input("Presiona cualquier tecla para continuar...\n");
         break;
       }
+      case "4": {
+        /// 1. Llama a la vista impura, que devuelve el título y los cambios
+            const datosParaEditar = editarTareaImpura(listaDeTareas);
+            
+            if (datosParaEditar) {
+              // 2. Llama a la lógica pura para obtener la nueva lista
+              const nuevaLista = editarTareaPura(
+                listaDeTareas, 
+                datosParaEditar.titulo, 
+                datosParaEditar.nuevosDatos
+              );
+              // 3. Reasigna el estado
+              listaDeTareas = nuevaLista;
+              console.log("¡Tarea editada con éxito!");
+            }
+            input("Presiona cualquier tecla para continuar...\n");
+            break;
+
+      }
       case "5": {
         const tituloParaEliminar = eliminarTareaImpura(listaDeTareas);
             
@@ -76,6 +97,11 @@ function main(): void {
         console.log("Adios!");
             break;
         }
+      default: {
+        console.log("Opcion no válida.");
+        input("Presiona cualquier tecla para continuar..\n");
+        break;
+      }
     }
 }
 }

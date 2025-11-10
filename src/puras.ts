@@ -125,3 +125,91 @@ export function eliminarTareaPura(lista: Tarea[], titulo: string): Tarea[] {
 export function generarMensajeConfirmacionEliminarPuro(tarea: Tarea): string {
     return `¿Estás seguro de que deseas eliminar la tarea "${tarea.titulo}"? (s/n): `;
 }
+
+/**
+ * Función Pura: Valida y transforma la entrada del usuario para el estado.
+ * @returns El estado ("Pendiente", etc.) o 'null' si es inválido.
+ */
+export function validarYTransformarEstadoPura(est: string): string | null {
+    const estadoNormalizado = est.trim().toUpperCase();
+    // Usamos un 'mapa' de objetos para la conversión
+    const mapaEstados: { [key: string]: string } = {
+        "P": "Pendiente",
+        "E": "En Curso",
+        "T": "Terminada",
+        "C": "Cancelada"
+    };
+    return mapaEstados[estadoNormalizado] || null;
+}
+
+/**
+ * Función Pura: Valida y transforma la entrada de dificultad.
+ * @returns El número (1, 2, 3) o 'null' si es inválido.
+ */
+export function validarDificultadPura(dif: string): number | null {
+    const dificultadNum = parseInt(dif);
+    return [1, 2, 3].includes(dificultadNum) ? dificultadNum : null;
+}
+
+/**
+ * Función Pura: Valida y transforma la entrada de fecha.
+ * @returns Un objeto Date o 'null' si está vacía o es inválida.
+ */
+export function validarVencimientoPuro(fecha: string): Date | null {
+    if (fecha.trim() === "") return null; // Válido que esté vacío
+    const fechaDate = new Date(fecha);
+    // isNaN(fechaDate.getTime()) es la forma de saber si una fecha es inválida
+    return isNaN(fechaDate.getTime()) ? null : fechaDate;
+}
+
+/**
+ * Función Pura: Genera el prompt para editar la descripción.
+ */
+export function generarPromptDescripcionPura(descripcionActual: string): string {
+    return `Nueva descripción (actual: ${descripcionActual}): `;
+}
+
+/**
+ * Función Pura: Genera el prompt para editar el estado.
+ */
+export function generarPromptEstadoPura(estadoActual: string): string {
+    return `Nuevo estado ([P]/[E]/[T]/[C]) (actual: ${estadoActual}): `;
+}
+
+/**
+ * Función Pura: Genera el prompt para editar la dificultad.
+ */
+export function generarPromptDificultadPura(dificultadActual: number): string {
+    return `Nueva dificultad ([1]/[2]/[3]) (actual: ${dificultadActual}): `;
+}
+
+/**
+ * Función Pura: Devuelve un *nuevo* objeto de tarea actualizado.
+ * Esta función es la que realmente "aplica" los cambios a UNA tarea.
+ * @param tarea La tarea original.
+ * @param nuevosDatos Un objeto con las propiedades a cambiar.
+ * @returns Un nuevo objeto Tarea, congelado.
+ */
+export function actualizarTareaPura(tarea: Tarea, nuevosDatos: Partial<DatosTarea>): Tarea {
+    const tareaActualizada: Tarea = {
+        ...tarea,       // 1. Copia todo lo viejo
+        ...nuevosDatos,   // 2. Sobrescribe los campos nuevos
+        edicion: new Date(), // 3. Actualiza la fecha de edición
+    };
+    return Object.freeze(tareaActualizada);
+}
+
+/**
+ * Función Pura: Devuelve una *nueva lista* con la tarea actualizada.
+ * Esta es la que usa .map() para encontrar la tarea en la lista.
+ * @param lista La lista original.
+ * @param titulo El título de la tarea a cambiar.
+ * @param nuevosDatos Los cambios a aplicar.
+ * @returns Una nueva lista de Tareas.
+ */
+export function editarTareaPura(lista: Tarea[], titulo: string, nuevosDatos: Partial<DatosTarea>): Tarea[] {
+    return lista.map(tarea => 
+        // Si no es la tarea, devuélvela tal cual
+        tarea.titulo === titulo ? actualizarTareaPura(tarea, nuevosDatos) : tarea
+    );
+}

@@ -9,7 +9,13 @@ import { formatearTareasPura,
          buscarTareaPorTituloPura,
          generarMensajeBusquedaPura,
          eliminarTareaPura,
-         generarMensajeConfirmacionEliminarPuro
+         generarMensajeConfirmacionEliminarPuro,
+         validarYTransformarEstadoPura,
+         validarDificultadPura,
+         validarVencimientoPuro,
+         generarPromptDescripcionPura,
+         generarPromptEstadoPura,
+         generarPromptDificultadPura
 } from "./puras";
 
 export function agregarTareaImpura(): DatosTarea | null{
@@ -34,13 +40,10 @@ export function agregarTareaImpura(): DatosTarea | null{
     let est: string = input(
       "3. Estado ([P]endiente / [E]n curso / [T]erminada / [C]ancelada): "
     );
-    est = est.trim().toUpperCase();
-    if (["P", "E", "T", "C"].includes(est)) {
-      if (est === "P") estado = "Pendiente";
-      if (est === "E") estado = "En Curso";
-      if (est === "T") estado = "Terminada";
-      if (est === "C") estado = "Cancelada";
-      break;
+    //llamamos a la lógica pura
+    estado = validarYTransformarEstadoPura(est);
+    if(estado){
+      break; //Si no es null, el estado es válido
     }
     console.log("Opción inválida. Usa P, E, T o C.");
   }
@@ -49,9 +52,10 @@ export function agregarTareaImpura(): DatosTarea | null{
   let dificultad: number = 0; // Default
   while (true) {
     let difUser: string = input("4. Dificultad ([1] / [2] / [3]): ");
-    let dif: number = parseInt(difUser);
-    if ([1, 2, 3].includes(dif)) {
-      dificultad = dif;
+    //Llamamos a la lógica pura
+    const difValidada = validarDificultadPura(difUser);
+    if (difValidada !== null) {
+      dificultad = difValidada;
       break;
     }
     console.log("Opción inválida. Ingresa 1, 2 o 3.");
@@ -61,25 +65,103 @@ export function agregarTareaImpura(): DatosTarea | null{
   let vencimientoUser: string = input(
     "5. Vencimiento (YYYY-MM-DD) o deja en blanco: "
   );
-  let vencimiento: Date | null = null;
-  if (vencimientoUser.trim() !== "") {
-    vencimiento = new Date(vencimientoUser);
-    if (isNaN(vencimiento.getTime())) {
-      console.log("Fecha inválida, se asigna 'null'.");
-      vencimiento = null;
+  //Llamamos a la lógica pura
+  let vencimiento: Date | null = validarVencimientoPuro(vencimientoUser);
+  if (vencimientoUser.trim() !== "" && vencimiento === null) {
+    console.log("Fecha inválida, se asigna 'null'.");
     }
-  }
 
   console.log("\n¡Datos recolectados!\n");
 
-  return {
+  const datosIncompletos: DatosTarea = {
     titulo: titulo.trim(),
     descripcion: descripcion.trim(),
-    estado: estado!,
+    estado: estado!, // Usamos '!' porque el bucle while asegura que no es null
     dificultad: dificultad,
     vencimiento: vencimiento,
   };
+  return datosIncompletos;
+}
+
+/**
+ * Función Impura: Gestiona el proceso de edición de una tarea.
+ * Pide título, busca, pide nuevos datos y devuelve los cambios.
+ * @returns Un objeto con el 'titulo' y los 'nuevosDatos' o 'null' si se cancela.
+ */
+export function editarTareaImpura(lista: Tarea[]): { titulo: string; nuevosDatos: Partial<DatosTarea> } | null {
+  console.log("\n=== Editar una tarea ===");
+  if (lista.length === 0) {
+    console.log("No hay tareas para editar.");
+    return null;
+  }
+
+  // 1. Pedir y buscar la tarea (Impuro + Puro)
+  const titulo = input("Ingresa el título de la tarea a editar: ");
+  const tareaExistente = buscarTareaPorTituloPura(lista, titulo);
+
+  if (!tareaExistente) {
+    console.log(`No se encontró ninguna tarea con el título "${titulo}".`);
+    return null;
+  }
+
+  console.log("Tarea encontrada. Ingresa los nuevos valores (deja en blanco para no cambiar).");
   
+  // Este objeto guardará SÓLO los campos que el usuario quiera cambiar
+  const nuevosDatos: Partial<DatosTarea> = {};
+
+
+  // --- Descripción ---
+  // Usamos la función pura para generar el prompt
+  const promptDesc = generarPromptDescripcionPura(tareaExistente.descripcion);
+  const nuevaDescripcion = input(promptDesc);
+  if (nuevaDescripcion.trim() !== "") {
+    nuevosDatos.descripcion = nuevaDescripcion;
+  }
+
+  // --- Estado ---
+  while (true) {
+    // Usamos la función pura para generar el prompt
+    const promptEst = generarPromptEstadoPura(tareaExistente.estado);
+    let est: string = input(promptEst);
+    
+    if (est.trim() === '') break; // Si da Enter, no quiere cambiar, salimos
+
+    // Usamos la función pura de validación
+    const estadoValidado = validarYTransformarEstadoPura(est);
+    if (estadoValidado) {
+      nuevosDatos.estado = estadoValidado;
+      break; // Válido y cambiado, salimos
+    }
+    console.log("Opción inválida. Usa P, E, T o C.");
+  }
+
+  // --- Dificultad ---
+  while (true) {
+    // Usamos la función pura para generar el prompt
+    const promptDif = generarPromptDificultadPura(tareaExistente.dificultad);
+    let difUser: string = input(promptDif);
+    
+    if (difUser.trim() === '') break; // No quiere cambiar
+
+    // Usamos la función pura de validación
+    const difValidada = validarDificultadPura(difUser);
+    if (difValidada !== null) {
+      nuevosDatos.dificultad = difValidada;
+      break;
+    }
+    console.log("Opción inválida. Ingresa 1, 2 o 3.");
+  }
+  
+  // (Omitimos 'vencimiento' por simplicidad, pero se añadiría igual que estos)
+
+  // 3. Devolver resultado
+  if (Object.keys(nuevosDatos).length === 0) {
+    console.log("No se ingresaron datos nuevos. Operación cancelada.");
+    return null;
+  }
+
+  // Devolvemos el título original y el objeto SÓLO con los cambios
+  return { titulo: tareaExistente.titulo, nuevosDatos };
 }
 
 
