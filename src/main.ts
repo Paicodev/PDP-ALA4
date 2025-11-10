@@ -3,26 +3,21 @@
 maneja el bucle principal y coordina las funciones puras e impuras*/
 
 import { input} from "./entradas";
-import { agregarTareaImpura} from "./impuras";
+import { agregarTareaImpura, gestionarVisualizacionImpura} from "./impuras";
 import { Tarea, crearTarea } from "./data";
-import { agregarTareaPura} from "./puras";
+import { agregarTareaPura, generarMenuPuro} from "./puras";
 
 let listaDeTareas: Tarea[] = [];
 
 function main(): void {
   while (true) {
-    console.log("\n==== MENÚ PRINCIPAL ====");
-    console.log("1. Ver mis tareas");
-    console.log("2. Buscar una tarea");
-    console.log("3. Agregar una tarea");
-    console.log("0. Salir");
-    console.log("==========================\n");
+    console.log(generarMenuPuro());
     let op: string = input("Elija una opción: ");
 
     switch (op) {
         case "1": {
-            
-            
+          gestionarVisualizacionImpura(listaDeTareas);
+          input("Presiona cualquier tecla para continuar...\n");
             break;
         }
         case "2": {

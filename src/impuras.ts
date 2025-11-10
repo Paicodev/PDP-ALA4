@@ -3,6 +3,10 @@
 
 import { Tarea, DatosTarea } from "./data";
 import { input } from "./entradas";
+import { formatearTareasPura,
+         generarMenuFiltrosPuro,
+         filtrarPorEstadoPura
+} from "./puras";
 
 export function agregarTareaImpura(): DatosTarea | null{
   console.log("\n=== Creando una nueva tarea ===");
@@ -71,4 +75,50 @@ export function agregarTareaImpura(): DatosTarea | null{
     dificultad: dificultad,
     vencimiento: vencimiento,
   };
+  
 }
+
+
+/**
+ * Función Impura: Muestra una lista de tareas en consola.
+ * Su única responsabilidad es llamar a la lógica pura y hacer console.log
+ */
+export function visualizarTareasImpura(lista: Tarea[]): void {
+  // 1. Llama a la función pura para obtener el texto formateado.
+  const textoFormateado = formatearTareasPura(lista);
+  // 2. Realiza la única acción impura: imprimir en consola.
+  console.log(textoFormateado);
+}
+
+/**
+ * Función Impura: Gestiona el submenú de filtros.
+ * (Muestra menú, pide input, llama a la lógica pura, y llama a la vista)
+ */
+export function gestionarVisualizacionImpura(lista: Tarea[]): void {
+  // 1. Llama a la función pura para generar el menú de filtros
+  console.log(generarMenuFiltrosPuro());
+  
+  // 2. Pide la opción (Impuro)
+  const op = input("Elija una opción: ");
+
+  let filtro: string | null = null;
+  
+  // 3. Decide el filtro basado en la entrada
+  switch(op) {
+    case "1": filtro = "TODAS"; break;
+    case "2": filtro = "Pendiente"; break;
+    case "3": filtro = "En Curso"; break;
+    case "4": filtro = "Terminada"; break;
+    case "0": return; // Volver
+    default:
+      console.log("Opción inválida.");
+      return;
+  }
+
+  // 4. Llama a la lógica pura de filtro
+  const tareasFiltradas = filtrarPorEstadoPura(lista, filtro);
+
+  // 5. Llama a la otra función impura para mostrar el resultado
+  visualizarTareasImpura(tareasFiltradas);
+}
+
