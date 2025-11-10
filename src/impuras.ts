@@ -7,7 +7,9 @@ import { formatearTareasPura,
          generarMenuFiltrosPuro,
          filtrarPorEstadoPura,
          buscarTareaPorTituloPura,
-         generarMensajeBusquedaPura
+         generarMensajeBusquedaPura,
+         eliminarTareaPura,
+         generarMensajeConfirmacionEliminarPuro
 } from "./puras";
 
 export function agregarTareaImpura(): DatosTarea | null{
@@ -141,4 +143,37 @@ export function buscarYMostrarTareaImpura(lista: Tarea[]): void {
 
   // 4. Realiza la acción impura de mostrar el mensaje
   console.log(mensaje);
+}
+
+/**
+ * Función Impura: Gestiona el proceso de eliminación de una tarea.
+ * Pide título, busca, pide confirmación y devuelve el título a eliminar.
+ * @returns El título de la tarea a eliminar, o 'null' si se cancela.
+ */
+export function eliminarTareaImpura(lista: Tarea[]): string | null {
+  console.log("\n=== Eliminar una tarea ===");
+  if (lista.length === 0) {
+    console.log("No hay tareas para eliminar.");
+    return null;
+  }
+
+  // 1. Pide el título (Impuro)
+  const titulo = input("Ingresa el título de la tarea a eliminar: ");
+
+  // 2. Llama a la lógica pura de búsqueda (que ya teníamos)
+  const tareaExistente = buscarTareaPorTituloPura(lista, titulo);
+
+  if (!tareaExistente) {
+    console.log(`No se encontró ninguna tarea con el título "${titulo}".`);
+    return null;
+  }
+
+  // 3. Llama a la lógica pura para generar el prompt de confirmación
+  const mensajeConfirmacion = generarMensajeConfirmacionEliminarPuro(tareaExistente);
+  
+  // 4. Pide la confirmación (Impuro)
+  const confirmacion = input(mensajeConfirmacion);
+
+  // 5. Devuelve el título solo si el usuario confirma con 's'
+  return confirmacion.toLowerCase() === 's' ? tareaExistente.titulo : null;
 }

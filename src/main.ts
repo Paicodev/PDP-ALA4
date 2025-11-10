@@ -6,14 +6,16 @@ import { input} from "./entradas";
 import { 
   agregarTareaImpura, 
   gestionarVisualizacionImpura,
-  buscarYMostrarTareaImpura
+  buscarYMostrarTareaImpura,
+  eliminarTareaImpura
 } from "./impuras";
 import { Tarea, crearTarea } from "./data";
 import { 
    agregarTareaPura,
    generarMenuPuro,
    buscarTareaPorTituloPura,
-   generarMensajeBusquedaPura
+   generarMensajeBusquedaPura,
+   eliminarTareaPura
   } from "./puras";
 
 let listaDeTareas: Tarea[] = [];
@@ -52,6 +54,23 @@ function main(): void {
         }
         input("Presiona cualquier tecla para continuar...\n");
         break;
+      }
+      case "5": {
+        const tituloParaEliminar = eliminarTareaImpura(listaDeTareas);
+            
+            if (tituloParaEliminar) {
+              // 1. Llama a la lógica pura para obtener la nueva lista
+              const nuevaLista = eliminarTareaPura(listaDeTareas, tituloParaEliminar);
+              // 2. Reasigna el estado
+              listaDeTareas = nuevaLista;
+              console.log("¡Tarea eliminada con éxito!");
+            } else {
+              // Esto ocurre si la tarea no se encontró o el usuario escribió 'n'
+              console.log("Operación cancelada.");
+            }
+            input("Presiona cualquier tecla para continuar...\n");
+            break;
+
       }
       case "0": {
         console.log("Adios!");

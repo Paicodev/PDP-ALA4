@@ -109,3 +109,19 @@ export function generarMensajeBusquedaPura(tareaEncontrada: Tarea | undefined, t
         return `\nNo se encontró ninguna tarea con el título "${tituloBuscado}".`;
     }
 }
+
+/**
+ * Función Pura: Elimina una tarea basándose en su título.
+ * Usa .filter() para devolver una lista nueva sin la tarea.
+ */
+export function eliminarTareaPura(lista: Tarea[], titulo: string): Tarea[] {
+    // .filter() es puro y devuelve un nuevo array
+    return lista.filter(tarea => tarea.titulo.toLowerCase() !== titulo.toLowerCase());
+}
+
+/**
+ * Función Pura: Genera el mensaje de confirmación para eliminar.
+ */
+export function generarMensajeConfirmacionEliminarPuro(tarea: Tarea): string {
+    return `¿Estás seguro de que deseas eliminar la tarea "${tarea.titulo}"? (s/n): `;
+}
