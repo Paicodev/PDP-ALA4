@@ -3,6 +3,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.crearTarea = crearTarea;
 function crearTarea(datos) {
+    const ahora = new Date();
     const tareaNueva = {
         titulo: datos.titulo,
         descripcion: datos.descripcion,

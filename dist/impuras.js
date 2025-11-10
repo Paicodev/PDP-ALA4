@@ -3,7 +3,10 @@
 //Este archivo tiene las funciones impuras
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.agregarTareaImpura = agregarTareaImpura;
+exports.visualizarTareasImpura = visualizarTareasImpura;
+exports.gestionarVisualizacionImpura = gestionarVisualizacionImpura;
 const entradas_1 = require("./entradas");
+const puras_1 = require("./puras");
 function agregarTareaImpura() {
     console.log("\n=== Creando una nueva tarea ===");
     // 1. Título
@@ -63,7 +66,49 @@ function agregarTareaImpura() {
         estado: estado,
         dificultad: dificultad,
         vencimiento: vencimiento,
-        creacion: new Date(),
-        edicion: new Date(),
     };
+}
+/**
+ * Función Impura: Muestra una lista de tareas en consola.
+ * Su única responsabilidad es llamar a la lógica pura y hacer console.log
+ */
+function visualizarTareasImpura(lista) {
+    // 1. Llama a la función pura para obtener el texto formateado.
+    const textoFormateado = (0, puras_1.formatearTareasPura)(lista);
+    // 2. Realiza la única acción impura: imprimir en consola.
+    console.log(textoFormateado);
+}
+/**
+ * Función Impura: Gestiona el submenú de filtros.
+ * (Muestra menú, pide input, llama a la lógica pura, y llama a la vista)
+ */
+function gestionarVisualizacionImpura(lista) {
+    // 1. Llama a la función pura para generar el menú de filtros
+    console.log((0, puras_1.generarMenuFiltrosPuro)());
+    // 2. Pide la opción (Impuro)
+    const op = (0, entradas_1.input)("Elija una opción: ");
+    let filtro = null;
+    // 3. Decide el filtro basado en la entrada
+    switch (op) {
+        case "1":
+            filtro = "TODAS";
+            break;
+        case "2":
+            filtro = "Pendiente";
+            break;
+        case "3":
+            filtro = "En Curso";
+            break;
+        case "4":
+            filtro = "Terminada";
+            break;
+        case "0": return; // Volver
+        default:
+            console.log("Opción inválida.");
+            return;
+    }
+    // 4. Llama a la lógica pura de filtro
+    const tareasFiltradas = (0, puras_1.filtrarPorEstadoPura)(lista, filtro);
+    // 5. Llama a la otra función impura para mostrar el resultado
+    visualizarTareasImpura(tareasFiltradas);
 }

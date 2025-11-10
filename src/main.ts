@@ -3,9 +3,18 @@
 maneja el bucle principal y coordina las funciones puras e impuras*/
 
 import { input} from "./entradas";
-import { agregarTareaImpura, gestionarVisualizacionImpura} from "./impuras";
+import { 
+  agregarTareaImpura, 
+  gestionarVisualizacionImpura,
+  buscarYMostrarTareaImpura
+} from "./impuras";
 import { Tarea, crearTarea } from "./data";
-import { agregarTareaPura, generarMenuPuro} from "./puras";
+import { 
+   agregarTareaPura,
+   generarMenuPuro,
+   buscarTareaPorTituloPura,
+   generarMensajeBusquedaPura
+  } from "./puras";
 
 let listaDeTareas: Tarea[] = [];
 
@@ -21,6 +30,8 @@ function main(): void {
             break;
         }
         case "2": {
+          buscarYMostrarTareaImpura(listaDeTareas);
+          input("Presiona cualquier tecla apra continuar...\n");
             break;
         }
       case "3": {

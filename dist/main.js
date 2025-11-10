@@ -10,15 +10,12 @@ const puras_1 = require("./puras");
 let listaDeTareas = [];
 function main() {
     while (true) {
-        console.log("\n==== MENÚ PRINCIPAL ====");
-        console.log("1. Ver mis tareas");
-        console.log("2. Buscar una tarea");
-        console.log("3. Agregar una tarea");
-        console.log("0. Salir");
-        console.log("==========================\n");
+        console.log((0, puras_1.generarMenuPuro)());
         let op = (0, entradas_1.input)("Elija una opción: ");
         switch (op) {
             case "1": {
+                (0, impuras_1.gestionarVisualizacionImpura)(listaDeTareas);
+                (0, entradas_1.input)("Presiona cualquier tecla para continuar...\n");
                 break;
             }
             case "2": {
@@ -41,6 +38,7 @@ function main() {
                 break;
             }
             case "0": {
+                console.log("Adios!");
                 break;
             }
         }

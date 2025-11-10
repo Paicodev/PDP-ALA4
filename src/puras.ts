@@ -86,3 +86,26 @@ export function filtrarPorEstadoPura(lista: Tarea[], estado: string): Tarea[] {
     // .filter es una HOF y es pura por naturaleza
     return lista.filter(tarea => tarea.estado === estado);
 }
+
+/**
+ * Función Pura: Busca una tarea por su título (ignorando mayúsculas/minúsculas).
+ * Usa .find() (una HOF) y es pura.
+ * @returns La Tarea encontrada o 'undefined' si no se encuentra.
+ */
+export function buscarTareaPorTituloPura(lista: Tarea[], titulo: string): Tarea | undefined {
+    // Comparamos todo en minúsculas para que la búsqueda no sea sensible
+    return lista.find(tarea => tarea.titulo.toLowerCase() === titulo.toLowerCase());
+}
+
+/**
+ * Función Pura: Genera un mensaje de resultado para la búsqueda.
+ * Reutiliza formatearTareasPura para mostrar la tarea si se encuentra.
+ */
+export function generarMensajeBusquedaPura(tareaEncontrada: Tarea | undefined, tituloBuscado: string): string {
+    if (tareaEncontrada) {
+        // Si la encontramos, usamos la función de formateo que ya teníamos
+        return "\n¡Tarea encontrada!" + formatearTareasPura([tareaEncontrada]);
+    } else {
+        return `\nNo se encontró ninguna tarea con el título "${tituloBuscado}".`;
+    }
+}

@@ -5,7 +5,9 @@ import { Tarea, DatosTarea } from "./data";
 import { input } from "./entradas";
 import { formatearTareasPura,
          generarMenuFiltrosPuro,
-         filtrarPorEstadoPura
+         filtrarPorEstadoPura,
+         buscarTareaPorTituloPura,
+         generarMensajeBusquedaPura
 } from "./puras";
 
 export function agregarTareaImpura(): DatosTarea | null{
@@ -122,3 +124,21 @@ export function gestionarVisualizacionImpura(lista: Tarea[]): void {
   visualizarTareasImpura(tareasFiltradas);
 }
 
+/**
+ * Función Impura: Pide un título, busca la tarea y muestra el resultado.
+ * Actúa como el "gestor" de la funcionalidad de búsqueda.
+ */
+export function buscarYMostrarTareaImpura(lista: Tarea[]): void {
+  console.log("\n=== Buscar una tarea ===");
+  // 1. Pide el título (Impuro)
+  const titulo = input("Ingresa el título de la tarea a buscar: ");
+
+  // 2. Llama a la función pura para la lógica de búsqueda
+  const tareaEncontrada = buscarTareaPorTituloPura(lista, titulo);
+
+  // 3. Llama a la función pura para generar el mensaje de resultado
+  const mensaje = generarMensajeBusquedaPura(tareaEncontrada, titulo);
+
+  // 4. Realiza la acción impura de mostrar el mensaje
+  console.log(mensaje);
+}
